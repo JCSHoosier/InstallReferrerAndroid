@@ -26,6 +26,7 @@
         android:stretchColumns="*">
 
         <!--Rows will be added dynamically here-->
+
     </TableLayout>
 
     <Button

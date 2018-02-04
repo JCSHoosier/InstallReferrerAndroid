@@ -1,8 +1,10 @@
 package com.taptaptap.referrercasestudy
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         infoText = findViewById(R.id.infoText)
         val postButton: Button = findViewById(R.id.postButton)
 
-        //Post to AllTheApps API when Button is clicked
+        //Post to AllTheApps when Button is clicked and send the response body to responseDialog()
         postButton.setOnClickListener {
             val allTheApps = Retrofit.Builder()
                     .baseUrl("https://api.alltheapps.org/")
@@ -45,8 +47,10 @@ class MainActivity : AppCompatActivity() {
                     .create(AllTheApps::class.java)
 
             val response = allTheApps.postData(postDataJson!!)
+
             response.enqueue(object : Callback<ResponseBody>{
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                override fun onResponse(call: Call<ResponseBody>,
+                                        response: Response<ResponseBody>) {
                     val jsonObject = JSONObject(response.body()?.string())
                     Log.i(TAG, "Response string is: $jsonObject")
                     responseDialog(this@MainActivity, jsonObject.toString(2))
@@ -62,14 +66,7 @@ class MainActivity : AppCompatActivity() {
         createReferrerBroadcastReceiver()
     }
 
-    private fun responseDialog(context : Context, response : String?) {
-        AlertDialog.Builder(context)
-                .setTitle("Successful post, response was:")
-                .setMessage(response)
-                .setNeutralButton("OK") { dialog, _ -> dialog.dismiss()}
-                .show()
-    }
-
+    //Creates a broadcast receiver used to listen for an intent that contains a referrerBroadcast
     private fun createReferrerBroadcastReceiver() {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
@@ -126,6 +123,14 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG,"jsonPostData set to: $jsonPostData")
 
         return jsonPostData
+    }
+
+    private fun responseDialog(context : Context, response : String?) {
+        AlertDialog.Builder(context)
+                .setTitle("Successful post, response was:")
+                .setMessage(response)
+                .setNeutralButton("OK") { dialog, _ -> dialog.dismiss()}
+                .show()
     }
 
     private fun setInfoText(success : Boolean) {

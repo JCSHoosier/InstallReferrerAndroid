@@ -7,6 +7,10 @@ import android.util.Log
 import java.net.URL
 import java.net.URLDecoder
 
+/*
+This class is used to listen for an install referrer and decode the URL and grab the query params.
+The query params are sent over another broadcast to be picked up by the MainActivity.
+ */
 open class ReferrerReceiver : BroadcastReceiver() {
     private val TAG = "ReferrerReceiver"
 
@@ -20,6 +24,7 @@ open class ReferrerReceiver : BroadcastReceiver() {
         val referrerQuery = referrerUrl.query
         Log.i(TAG, "Referrer query params received: $referrerQuery")
 
+        // Create and send an intent over a broadcast with the query parameters from the referrer
         val referrerIntent = Intent("referrerBroadcast").putExtra("referrerQuery", referrerQuery)
         Log.i(TAG, "Sending broadcast with referrerQuery...")
         context.sendBroadcast(referrerIntent)
