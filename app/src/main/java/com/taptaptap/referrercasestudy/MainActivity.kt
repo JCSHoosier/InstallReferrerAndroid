@@ -11,10 +11,7 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.TableLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.google.gson.Gson
 import com.taptaptap.referrercasestudy.api.AllTheApps
 import com.taptaptap.referrercasestudy.model.PostDataModel
@@ -43,13 +40,15 @@ class MainActivity : AppCompatActivity() {
         //Recover saved JSON if applicable and preload view
         val savedJson = PreferenceManager.getDefaultSharedPreferences(this).getString("jsonObject", "")
         Log.i(TAG, "saved json: $savedJson")
-        if (savedJson != null) {
+        if (savedJson != "") {
             postDataJson = JSONObject(savedJson)
             loadRows(postDataJson!!)
         }
 
         //Post to AllTheApps when Button is clicked and send the response body to responseDialog()
         postButton.setOnClickListener {
+            setPostButtonVisibility(false)
+            setPostProgressBarVisibility(true)
             val allTheApps = Retrofit.Builder()
                     .baseUrl("https://api.alltheapps.org/")
                     .addConverterFactory(GsonConverterFactory.create())
@@ -61,12 +60,16 @@ class MainActivity : AppCompatActivity() {
             response.enqueue(object : Callback<ResponseBody>{
                 override fun onResponse(call: Call<ResponseBody>,
                                         response: Response<ResponseBody>) {
+                    setPostButtonVisibility(true)
+                    setPostProgressBarVisibility(false)
                     val jsonObject = JSONObject(response.body()?.string())
                     Log.i(TAG, "Response string is: $jsonObject")
                     responseDialog(this@MainActivity, jsonObject.toString(2))
                 }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG, "Post failed: $t")
+                    setPostButtonVisibility(true)
+                    setPostProgressBarVisibility(false)
                     showToast(this@MainActivity,"Post failed!")
                 }
             })
@@ -133,6 +136,8 @@ class MainActivity : AppCompatActivity() {
         setPostButtonVisibility(true)
     }
 
+    //Converts the queryList from the referrer, adds some device identifiers, and converts it to a
+    //JSONObject
     fun getPostDataJson(queryList: List<List<String>>) : JSONObject {
         postDataModel = PostDataModel(
                 userId = queryList[0][1],
@@ -166,12 +171,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setPostProgressBarVisibility(visible: Boolean) {
+        val postProgressBar = findViewById<ProgressBar>(R.id.postProgressBar)
+        if (visible) {
+            postProgressBar.visibility = Button.VISIBLE
+        } else {
+            postProgressBar.visibility = Button.GONE
+        }
+    }
+
     private fun setPostButtonVisibility(visible : Boolean) {
         val postButton = findViewById<Button>(R.id.postButton)
         if (visible) {
             postButton.visibility = Button.VISIBLE
         } else {
-            postButton.visibility = Button.INVISIBLE
+            postButton.visibility = Button.GONE
         }
     }
 
