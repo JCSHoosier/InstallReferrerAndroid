@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var postDataModel: PostDataModel? = null
     private var infoText: TextView? = null
     private var postDataJson: JSONObject? = null
+    private var broadcastReceiver: BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,13 +63,22 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        // Set up broadcast receiver to get intent from ReferrerReceiver when it is hit
+    }
+
+    override fun onResume() {
+        super.onResume()
         createReferrerBroadcastReceiver()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i(TAG, "Deregistering internal referrer broadcast receiver...")
+        unregisterReceiver(broadcastReceiver)
     }
 
     //Creates a broadcast receiver used to listen for an intent that contains a referrerBroadcast
     private fun createReferrerBroadcastReceiver() {
-        val broadcastReceiver = object : BroadcastReceiver() {
+        broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 showToast(context, "Broadcast Received")
 
