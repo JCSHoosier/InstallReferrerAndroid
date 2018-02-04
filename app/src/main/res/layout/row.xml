@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/border">
+    android:layout_margin="5dp"
+    >
 
         <TextView
             android:id="@+id/dataKey"
@@ -11,9 +12,9 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:gravity="start" />
+            android:textSize="13.5sp"
+            android:gravity="start"
+            android:background="@drawable/border"/>
 
         <TextView
             android:id="@+id/dataValue"
@@ -21,8 +22,8 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:gravity="end" />
+            android:textSize="13.5sp"
+            android:gravity="end"
+            android:background="@drawable/border"/>
 
 </TableRow>

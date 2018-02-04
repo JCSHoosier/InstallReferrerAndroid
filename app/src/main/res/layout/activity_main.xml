@@ -21,7 +21,10 @@
         android:id="@+id/dataTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="30dp"
         android:shrinkColumns="*"
         android:stretchColumns="*">
 
@@ -35,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
+        android:padding="10dp"
         android:text="@string/post_button"/>
     
     <ProgressBar
