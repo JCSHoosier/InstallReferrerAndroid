@@ -20,3 +20,5 @@ appear in a dialog.
     -n com.taptaptap.referrercasestudy/.util.ReferrerReceiver \
     --es "referrer" "https%3a%2f%2ftest.com%2fget%2fapp%3fuserId%3d123%26implementationid%3dtest%26trafficSource%3dtest%26userClass%3d20170101"
     ```
+1) UI should show contents of referrer and some device information. Press post to send to API and 
+dialog will appear showing the successful JSON response.
