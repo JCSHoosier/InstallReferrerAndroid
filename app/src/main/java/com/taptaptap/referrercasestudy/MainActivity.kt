@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,6 +40,14 @@ class MainActivity : AppCompatActivity() {
         infoText = findViewById(R.id.infoText)
         val postButton: Button = findViewById(R.id.postButton)
 
+        //Recover saved JSON if applicable and preload view
+        val savedJson = PreferenceManager.getDefaultSharedPreferences(this).getString("jsonObject", "")
+        Log.i(TAG, "saved json: $savedJson")
+        if (savedJson != null) {
+            postDataJson = JSONObject(savedJson)
+            loadRows(postDataJson!!)
+        }
+
         //Post to AllTheApps when Button is clicked and send the response body to responseDialog()
         postButton.setOnClickListener {
             val allTheApps = Retrofit.Builder()
@@ -67,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.i(TAG, "Registering internal referrer broadcast receiver...")
         createReferrerBroadcastReceiver()
     }
 
@@ -87,10 +97,13 @@ class MainActivity : AppCompatActivity() {
                 // Split params to a Hash Set
                 val queryList = referrerQuery.split("&").map { m -> m.split("=") }.toList()
                 postDataJson = getPostDataJson(queryList)
+
+                //Save JSONObject.toString() to SharedPreferences for recovery in onCreate()
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("jsonObject", postDataJson.toString()).apply()
+
                 loadRows(postDataJson!!)
             }
         }
-        Log.i(TAG, "Registering internal referrer broadcast receiver...")
         registerReceiver(broadcastReceiver, IntentFilter("referrerBroadcast"))
     }
 
@@ -101,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         dataTable.removeAllViews()
 
         val iterator : Iterator<String> = jsonPostData.keys()
+
         // Add rows to table for each key value pair
         while (iterator.hasNext()) {
             val key = iterator.next()
