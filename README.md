@@ -8,6 +8,10 @@ appear in a dialog.
  
 ## How to Test: 
 
+_*Note: After running this the first time, the referrer data is saved to shared preferences and is
+preloaded on all subsequent app loads. This can be overwrote by sending another broadcast to the 
+INSTALL_REFERRER*_
+
 1) Run the app on AVD (or plug in Android device),  
 1) In the terminal enter the Android Debugging Bridge shell:
     ```
