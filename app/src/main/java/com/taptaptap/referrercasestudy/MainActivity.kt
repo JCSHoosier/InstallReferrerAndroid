@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             loadRows(postDataJson!!)
         }
 
-        //Post to AllTheApps when Button is clicked and send the response body to responseDialog()
+        //Post to AllTheApps when button is clicked and send the response body to responseDialog().
+        //Button is only visible when postDataJson contains a value so it can rely on that data.
         postButton.setOnClickListener {
             setPostButtonVisibility(false)
             setPostProgressBarVisibility(true)
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(broadcastReceiver, IntentFilter("referrerBroadcast"))
     }
 
+    //Sets up a table in the main UI of a table with a list of values from the JSONObject
     private fun loadRows(jsonPostData : JSONObject) {
         val dataTable = findViewById<TableLayout>(R.id.dataTable)
 
@@ -148,6 +150,7 @@ class MainActivity : AppCompatActivity() {
                 manufacturer = Build.MANUFACTURER,
                 model = Build.MODEL)
 
+        //Sets the value at a higher level to be used by other funtions
         val jsonPostData = JSONObject(Gson().toJson(postDataModel))
         Log.i(TAG,"jsonPostData set to: $jsonPostData")
 
