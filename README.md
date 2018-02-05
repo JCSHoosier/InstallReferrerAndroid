@@ -15,7 +15,7 @@ INSTALL_REFERRER*_
 1) Run the app on AVD (or plug in Android device),  
 1) In the terminal enter the Android Debugging Bridge shell:
     ```
-    cd Library/Android/sdk/platform-tools
+    cd ~/Library/Android/sdk/platform-tools
     ./adb shell
     ```
 1) Send a test broadcast (the `referrer` will contain the data that will be passed to the app UI)
