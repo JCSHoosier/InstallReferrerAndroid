@@ -1,4 +1,4 @@
-# InstallReferrerAndroidExample
+# InstallReferrerAndroid
 
 This is a native Android application written in Kotlin that accepts a broadcast INSTALL_REFERRER 
 and displays the content from the referrer, along with several device identifiers, on the UI.
